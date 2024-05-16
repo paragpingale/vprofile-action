@@ -1,4 +1,4 @@
-name: "Vprofile Actions"
+name: Vprofile Actions
 on: workflow_dispatch
 
 env:
@@ -53,4 +53,3 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_URL }} #OPTIONAL
 
-          
