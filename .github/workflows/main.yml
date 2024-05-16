@@ -1,4 +1,4 @@
-name: Vprofile Actions
+name: "Vprofile Actions"
 on: workflow_dispatch
 
 env:
