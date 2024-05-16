@@ -53,3 +53,31 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_URL }} #OPTIONAL
 
+  BUILD_AND_PUBLISH_JOB2:
+    needs: Testing
+    # Testing must complete before running this job2
+    runs-on: ubuntu-latest
+    steps:
+      - name: Code checkout
+        uses: actions/checkout@v4
+
+      - name: Build and Deploy Image to ECR repository
+        # docker ECR github marketplace actions https://github.com/marketplace/actions/docker-ecr
+        uses: appleboy/docker-ecr-action@master
+        with:
+          access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          registry: ${{ secrets.REGISTRY }}
+          # this is the URL for the ECR repository for artifact deployment to EKS
+          #cache_from: ${{ secrets.cache }}
+          repo: ${{ env.ECR_REPOSITORY }}
+          # this is the ECR repository name
+          region: ${{ env.AWS_REGION }}
+          tags: latest,${{ github.run_number }}
+          # tag is latest with the github run number. This will be the build number.
+          #auto_tag: true
+          daemon_off: false
+          dockerfile: ./Dockerfile
+          # current working directory root
+          context: ./    
+
